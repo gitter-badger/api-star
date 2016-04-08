@@ -43,7 +43,7 @@ First we'll edit the `App` import line.
 
     from api_star.frameworks.falcon import App
 
-Now install Falcon, and a WSGI server, and start the API again:
+Now install Falcon and the gunicorn WSGI server, and start the API again:
 
     $ pip install falcon gunicorn
     $ gunicorn -b localhost:5000 example:app
