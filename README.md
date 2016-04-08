@@ -1,6 +1,6 @@
 # API Star
 
-*An API framework for either Flask or Falcon.*
+*An API framework for Flask & Falcon.*
 
 * Support for Python 2.7 or 3.4+.
 * Flask and Falcon backends.
