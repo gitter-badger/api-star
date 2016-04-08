@@ -59,12 +59,12 @@ class DocsRenderer(object):
     format = 'html'
 
     def __init__(self):
-        loader = jinja2.PackageLoader('coreapidocs', 'templates')
+        loader = jinja2.PackageLoader('api_star', 'templates')
         env = jinja2.Environment(loader=loader)
-        self.template = env.get_template('home.html')
+        self.template = env.get_template('docs.html')
 
     def __call__(self, data, **context):
-        return self.template.render(docs=data)
+        return self.template.render(document=data)
 
 
 class HTMLRenderer(object):

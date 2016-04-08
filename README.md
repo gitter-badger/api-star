@@ -9,24 +9,24 @@
 
 ## Getting started.
 
-For this example we'll use Python 3 and Flask.
+For this example we'll use Flask.
 
-    $ pip3 install api-star
-    $ pip3 install flask flask-cli
-    $ touch example_api.py
+    $ pip install api-star
+    $ pip install flask flask-cli
 
-Here's our first API, which takes a date as a string like "2000-01-01", and returns the day of the week, such as "Saturday".
+Here's our first API, which takes a date as a string like "2000-01-01", and returns the day of the week, such as "Saturday". Put this in a file named `example_api.py`:
 
     from api_star.frameworks.flask import App
     from api_star.validators import iso_date
 
-    app = App(__name__)
+    app = App(__name__, title='Day of week API')
 
     @app.get('/day-of-week/')
-    def day_of_week(date: iso_date()):
+    def day_of_week(date):
         """
         Returns the day of the week for the given date.
         """
+        date = iso_date()(date)
         return {'day': date.strftime('%A')}
 
 Now let's run the service:
@@ -44,11 +44,11 @@ API Star provides automatic schema generation, and can render the schema into va
 
 Once you've included a schema, clients can inspect and interact with your API using the `coreapi` dynamic client library.
 
-    $ pip install coreapi-cli
+    $ pip install coreapi
     $ coreapi get http://127.0.0.1:5000/
-    <Example API "http://127.0.0.1:5000/">
+    <Day of week API "http://127.0.0.1:5000/">
         day_of_week(date)
-    $ coreapi action day_of_week date=1979-03-04
+    $ coreapi action day_of_week --param date 1979-03-04
     {"day": "Sunday"}
 
 ## Documentation
