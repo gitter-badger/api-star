@@ -19,7 +19,7 @@ Here's our first API, which takes a date as a string like "2000-01-01", and retu
     from api_star.frameworks.flask import App
     from api_star.validators import iso_date
 
-    app = App(__name__, title='Day of week API')
+    app = App(__name__, title='Day of Week API')
 
     @app.get('/day-of-week/')
     def day_of_week(date):
@@ -31,35 +31,31 @@ Here's our first API, which takes a date as a string like "2000-01-01", and retu
 
 Now let's run the service:
 
-    $ flask --app=example_api run
+    $ flask --app=example_api --debug run
 
 Now we can interact with the API
 
     $ curl http://127.0.0.1:5000/day-of-week/?date=1979-03-04
     {"day": "Sunday"}
 
-## Schema generation & client libraries.
+## Documentation, schema generation & client libraries.
 
-API Star provides automatic schema generation, and can render the schema into various formats.
+API Star provides support for automatic documentation and schema generation.
+Let's add an endpoint that will render API documentation when requested
+by a browser, or a schema when requested by an API client.
 
-Once you've included a schema, clients can inspect and interact with your API using the `coreapi` dynamic client library.
+    from api_star import renderers
+
+    @app.get('/', renderers=[CoreJSONRenderer(), DocsRenderer()], exclude_from_schema=True)
+    def root():
+        return app.schema
+
+Once you've included a schema, clients can inspect and interact with your
+deployed API using the `coreapi` dynamic client library.
 
     $ pip install coreapi
     $ coreapi get http://127.0.0.1:5000/
-    <Day of week API "http://127.0.0.1:5000/">
+    <Day of Week API "http://127.0.0.1:5000/">
         day_of_week(date)
     $ coreapi action day_of_week --param date 1979-03-04
     {"day": "Sunday"}
-
-## Documentation
-
-More complete project documentation is available at http://api-star.com/
-
-* [Frameworks](http://api-star.com/frameworks/)
-* [Parsers](http://api-star.com/parsers/)
-* [Renderers](http://api-star.com/renderers/)
-* [Authentication](http://api-star.com/authentication/)
-* [Permissions](http://api-star.com/permissions/)
-* [Validation](http://api-star.com/validation/)
-* [Schemas](http://api-star.com/schemas/)
-* [Client library](http://api-star.com/client-library/)
