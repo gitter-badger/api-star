@@ -38,6 +38,8 @@ Now we can interact with the API
     $ curl http://127.0.0.1:5000/day-of-week/?date=1979-03-04
     {"day": "Sunday"}
 
+## Alternative backends.
+
 We can also switch over to using the Falcon backend.
 First we'll edit the `App` import line.
 
