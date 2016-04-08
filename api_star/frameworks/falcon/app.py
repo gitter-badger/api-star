@@ -5,6 +5,7 @@ from api_star.schema import get_link
 from api_star.permissions import check_permissions
 from api_star.renderers import render
 from collections import namedtuple
+import coreapi
 import falcon
 
 
@@ -26,7 +27,7 @@ class App(falcon.API):
     request_class = APIRequest
     response_class = APIResponse
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, module=None, **kwargs):
         self._registered = {}
         self.links = {}
         self.title = kwargs.pop('title', None)
@@ -36,7 +37,7 @@ class App(falcon.API):
         self.permissions = kwargs.pop('permissions', None)
         if 'request_type' not in kwargs:
             kwargs['request_type'] = App.request_class
-        super(App, self).__init__(*args, **kwargs)
+        super(App, self).__init__(**kwargs)
         self.add_error_handler(APIException, error_handler)
 
     def get(self, url, **options):

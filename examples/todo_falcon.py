@@ -3,7 +3,7 @@ from api_star.authentication import BasicAuthentication
 from api_star.exceptions import NotFound
 from api_star.frameworks.falcon import App
 from api_star.permissions import IsAuthenticated
-from api_star.renderers import CoreJSONRenderer
+from api_star.renderers import CoreJSONRenderer, DocsRenderer
 from api_star.schema import add_schema
 import uuid
 

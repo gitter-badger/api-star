@@ -28,14 +28,14 @@ class App(Flask):
     request_class = APIRequest
     response_class = APIResponse
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, module=None, **kwargs):
         self.links = {}
         self.title = kwargs.pop('title', None)
         self.parsers = kwargs.pop('parsers', None)
         self.renderers = kwargs.pop('renderers', None)
         self.authenticators = kwargs.pop('authenticators', None)
         self.permissions = kwargs.pop('permissions', None)
-        super(App, self).__init__(*args, **kwargs)
+        super(App, self).__init__(module, **kwargs)
 
     def dispatch_request(self):
         try:
