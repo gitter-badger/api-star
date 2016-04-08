@@ -14,7 +14,7 @@ For this example we'll use Flask.
     $ pip install api-star
     $ pip install flask flask-cli
 
-Here's our first API, which takes a date as a string like "2000-01-01", and returns the day of the week, such as "Saturday". Put this in a file named `example_api.py`:
+Here's our first API, which takes a date as a string like "2000-01-01", and returns the day of the week, such as "Saturday". Put this in a file named `example.py`:
 
     from api_star.frameworks.flask import App
     from api_star.validators import iso_date
@@ -31,7 +31,7 @@ Here's our first API, which takes a date as a string like "2000-01-01", and retu
 
 Now let's run the service:
 
-    $ flask --app=example_api --debug run
+    $ flask --app=example --debug run
 
 Now we can interact with the API
 
