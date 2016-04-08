@@ -61,7 +61,7 @@ Let's add an endpoint that will render API documentation to support this.
 
 Now when we visit the endpoint in a browser we get some API documentation.
 
-![Documentation screenshot](https://raw.githubusercontent.com/tomchristie/api-star/master/docs/screenshot.md)
+![Documentation screenshot](https://raw.githubusercontent.com/tomchristie/api-star/master/docs/screenshot.png)
 
 Or if we request the endpoint with a command-line client, we get a schema.
 
