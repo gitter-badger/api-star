@@ -52,18 +52,18 @@ if sys.argv[-1] == 'publish':
 
 
 setup(
-    name='coreapi',
+    name='api-star',
     version=version,
     url='http://www.api-star.org',
     license='BSD',
-    description='An API framework for Flask or Falcon.',
+    description='An API framework for Flask & Falcon.',
     author='Tom Christie',
     author_email='tom@tomchristie.com',
     packages=get_packages('api_star'),
     package_data=get_package_data('api_star'),
     install_requires=[
         'coreapi',
-        'werkzueg',
+        'werkzeug',
         'jinja2',
         'uritemplate'
     ],

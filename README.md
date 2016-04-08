@@ -38,7 +38,7 @@ Now we can interact with the API
     $ curl http://127.0.0.1:5000/day-of-week/?date=1979-03-04
     {"day": "Sunday"}
 
-## Documentation, schema generation & client libraries.
+## Documentation & schema generation.
 
 API Star provides support for automatic documentation and schema generation.
 Let's add an endpoint that will render API documentation when requested
@@ -50,8 +50,10 @@ by a browser, or a schema when requested by an API client.
     def root():
         return app.schema
 
+## Client libraries.
+
 Once you've included a schema, clients can inspect and interact with your
-deployed API using the `coreapi` dynamic client library.
+deployed API using the `coreapi` command-line client.
 
     $ pip install coreapi
     $ coreapi get http://127.0.0.1:5000/
