@@ -1,6 +1,6 @@
 # API Star
 
-*An API framework for either Flask or Falcon.*
+*An API framework for Flask & Falcon.*
 
 * Support for Python 2.7 or 3.4+.
 * Flask and Falcon backends.
@@ -39,12 +39,14 @@ Now we can interact with the API
     $ curl http://127.0.0.1:5000/day-of-week/?date=1979-03-04
     {"day": "Sunday"}
 
+## Alternative backends.
+
 We can also switch over to using the Falcon backend.
 First we'll edit the `App` import line.
 
     from api_star.frameworks.falcon import App
 
-Now install Falcon, and a WSGI server, and start the API again:
+Now install Falcon and the gunicorn WSGI server, and start the API again:
 
     $ pip install falcon gunicorn
     $ gunicorn -b localhost:5000 example:app
