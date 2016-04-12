@@ -448,7 +448,7 @@ def object_of(spec):
                 # A value has been included for this field.
                 try:
                     validated[key] = validator(item)
-                except ValidationError, exc:
+                except ValidationError as exc:
                     invalid[key] = exc.description
 
         if invalid:

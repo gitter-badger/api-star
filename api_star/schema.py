@@ -1,4 +1,5 @@
 from api_star import renderers
+from api_star.compat import getargspec
 import coreapi
 import re
 import uritemplate
@@ -31,9 +32,10 @@ def get_link(url, method, func):
     """
     path_params = uritemplate.variables(url)
 
-    names = func.__code__.co_varnames[:func.__code__.co_argcount]
+    spec = getargspec(func)
+    names = spec.args
 
-    num_optional = len(func.__defaults__ or [])
+    num_optional = len(spec.defaults or [])
     num_required = len(names) - num_optional
     required_list = [
         True for idx in range(num_required)

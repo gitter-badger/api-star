@@ -82,8 +82,8 @@ class App(falcon.API):
                         if field.name in request.data:
                             params[field.name] = request.data[field.name]
                     elif field.location == 'query':
-                        if field.name in request.args:
-                            params[field.name] = request.args[field.name]
+                        if field.name in request.params:
+                            params[field.name] = request.params[field.name]
                     elif field.location == 'body':
                         params[field.name] = request.data
 

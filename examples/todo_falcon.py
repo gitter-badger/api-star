@@ -1,10 +1,9 @@
 from coreapi import Document
-from api_star.authentication import BasicAuthentication
+from api_star import validators
+from api_star.decorators import validate
 from api_star.exceptions import NotFound
 from api_star.frameworks.falcon import App
-from api_star.permissions import IsAuthenticated
 from api_star.renderers import CoreJSONRenderer, DocsRenderer
-from api_star.schema import add_schema
 import uuid
 
 
@@ -46,14 +45,14 @@ def list_notes():
 
 
 @app.post('/notes/')
-def create_note(description, complete=False):
+@validate(description=validators.text(max_length=100))
+def create_note(description):
     """
     Creates a new note.
 
     * description - A short description of the note.
-    * [complete] - True if the task has been completed, false otherwise.
     """
-    note = {'id': get_id(), 'description': description, 'complete': complete}
+    note = {'id': get_id(), 'description': description, 'complete': False}
     notes.insert(0, note)
     return note
 
@@ -70,6 +69,10 @@ def read_note(note_id):
 
 
 @app.put('/notes/{note_id}/')
+@validate(
+    description=validators.text(max_length=100),
+    complete=validators.boolean()
+)
 def update_note(note_id, description=None, complete=None):
     """
     Update a note.

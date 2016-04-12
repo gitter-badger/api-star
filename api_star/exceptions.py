@@ -1,12 +1,15 @@
 class APIException(Exception):
-    description = 'An error occurred.'
     code = 500
+    description = 'An error occurred.'
 
     def __init__(self, description=None, code=None):
         if description is not None:
             self.description = description
         if code is not None:
             self.code = code
+
+    def __str__(self):
+        return repr(self.description)
 
 
 class BadRequest(APIException):

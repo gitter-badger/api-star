@@ -16,17 +16,18 @@ For this example we'll use Flask.
 
 Here's our first API, which takes a date as a string like "2000-01-01", and returns the day of the week, such as "Saturday". Put this in a file named `example.py`:
 
+    from api_star.decorators import validate
     from api_star.frameworks.flask import App
     from api_star.validators import iso_date
 
     app = App(__name__, title='Day of Week API')
 
     @app.get('/day-of-week/')
+    @validate(date=iso_date())
     def day_of_week(date):
         """
         Returns the day of the week, for the given date.
         """
-        date = iso_date()(date)
         return {'day': date.strftime('%A')}
 
 Now let's run the service:
