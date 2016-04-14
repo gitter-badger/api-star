@@ -1,8 +1,8 @@
 # coding: utf8
 from __future__ import unicode_literals
 from api_star.exceptions import NotAcceptable, UnsupportedMediaType
-from api_star.parsers import JSONParser, MultiPartParser, URLEncodedParser
-from api_star.renderers import JSONRenderer
+from api_star.parsers import json_parser, multipart_parser, urlencoded_parser
+from api_star.renderers import json_renderer
 from werkzeug.datastructures import MultiDict
 
 
@@ -51,8 +51,8 @@ def _negotiate_renderer(accept, renderers):
 
 
 class RequestMixin(object):
-    _parsers = (JSONParser(), MultiPartParser(), URLEncodedParser())
-    _renderers = (JSONRenderer(),)
+    _parsers = (json_parser(), multipart_parser(), urlencoded_parser())
+    _renderers = (json_renderer(),)
     _authenticators = ()
 
     @property

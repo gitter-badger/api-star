@@ -1,11 +1,11 @@
 # coding: utf8
 from __future__ import unicode_literals
 from flask import request, Flask
+from api_star.core import check_permissions
 from api_star.exceptions import APIException
 from api_star.frameworks.flask.request import APIRequest
 from api_star.frameworks.flask.response import APIResponse
 from api_star.schema import get_link
-from api_star.permissions import check_permissions
 from werkzeug.exceptions import HTTPException
 from werkzeug.routing import parse_rule
 import coreapi

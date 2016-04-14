@@ -1,71 +1,76 @@
+from api_star.compat import Base64DecodeError
 from api_star.exceptions import Unauthorized
 import base64
 
 
-class BasicAuthentication(object):
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+def basic_auth(lookup_username):
+    """
+    HTTP Basic Authentication.
 
-    def __call__(self, request):
-        auth = request.headers.get('authorization', '').split()
+    `lookup_username` - A `function(username, password)` that returns a
+                        user instance of some kind, or `None`.
+    """
+    errors = {
+        'invalid-header': 'Invalid basic authorization header.',
+        'incorrect-credentials': 'Incorrect username or password.'
+    }
 
-        if not auth or auth[0].lower() != b'basic':
+    def authenticator(request):
+        header = request.headers.get('Authorization', '').split()
+
+        if not header or header[0].lower() != b'basic':
+            # Basic authentication credentials were not included in request.
             return None
 
-        if len(auth) == 1:
-            msg = 'Invalid value in Authorization header. No credentials provided.'
-            raise Unauthorized(msg)
-        elif len(auth) > 2:
-            msg = 'Invalid value in Authorization header. Credentials string should not contain spaces.'
-            raise Unauthorized(msg)
+        if len(header) != 2:
+            raise Unauthorized(errors['invalid-header'])
 
         try:
-            decoded = base64.b64decode(auth[1]).decode('iso-8859-1')
-        except (TypeError, UnicodeDecodeError):
-            msg = 'Invalid value in Authorization header. Credentials not correctly base64 encoded.'
-            raise Unauthorized(msg)
+            decoded = base64.b64decode(header[1]).decode('iso-8859-1')
+        except Base64DecodeError:
+            raise Unauthorized(errors['invalid-header'])
 
-        username, _, password = decoded.partition(':')
-        return self.authenticate_credentials(username, password)
+        username, delimiter, password = decoded.partition(':')
+        if not delimiter:
+            raise Unauthorized(errors['invalid-header'])
 
-    def authenticate_credentials(self, username, password):
-        if username != self.username or password != self.password:
-            msg = 'Incorrect username or password.'
-            raise Unauthorized(msg)
+        auth = lookup_username(username=username, password=password)
+        if auth is None:
+            raise Unauthorized(errors['incorrect-credentials'])
 
-        return username
+        return auth
+
+    return authenticator
 
 
-class TokenAuthentication(object):
-    def __init__(self, username, token):
-        self.username = username
-        self.token = token
+def token_auth(lookup_token):
+    """
+    A simple token-based authentication scheme.
 
-    def __call__(self, request):
-        auth = request.headers.get('authorization', '').split()
+    `lookup_token` - A `function(token)` that returns a user instance of some
+                     kind, or `None`.
+    """
+    errors = {
+        'invalid-header': 'Invalid token authorization header.',
+        'incorrect-credentials': 'Incorrect token.'
+    }
 
-        if not auth or auth[0].lower() != b'token':
+    def authenticator(request):
+        header = request.headers.get('Authorization', '').split()
+
+        if not header or header[0].lower() != b'token':
+            # Token authentication credentials were not included in request.
             return None
 
-        if len(auth) == 1:
-            msg = 'Invalid token in Authorization header. No credentials provided.'
-            raise Unauthorized(msg)
-        elif len(auth) > 2:
-            msg = 'Invalid token in Authorization header. Credentials string should not contain spaces.'
-            raise Unauthorized(msg)
+        if len(header) != 2:
+            raise Unauthorized(errors['invalid-header'])
 
-        try:
-            token = auth[1].decode('iso-8859-1')
-        except UnicodeDecodeError:
-            msg = 'Invalid token in Authorization header. HTTP request headers must be ISO-8859-1 encoded.'
-            raise Unauthorized(msg)
+        token = header[1].decode('iso-8859-1')
 
-        return self.authenticate_credentials(token)
+        auth = lookup_token(token)
+        if auth is None:
+            raise Unauthorized(errors['incorrect-credentials'])
 
-    def authenticate_credentials(self, token):
-        if token != self.token:
-            msg = 'Incorrect token.'
-            raise Unauthorized(msg)
+        return auth
 
-        return self.username
+    return authenticator

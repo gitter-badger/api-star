@@ -2,10 +2,13 @@
 
 *An API framework for Flask & Falcon.*
 
-* Support for Python 2.7 or 3.4+.
 * Flask and Falcon backends.
 * Automatic schema & documentation generation.
 * Dynamic client libraries for interacting with your APIs.
+
+## Requirements.
+
+Python 2.7 or 3.4+.
 
 ## Getting started.
 

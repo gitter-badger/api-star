@@ -1,75 +1,66 @@
 # coding: utf8
 from __future__ import unicode_literals
-from api_star.compat import string_types, text_type
+from api_star.compat import text_type, COMPACT_SEPARATORS, VERBOSE_SEPARATORS
+from api_star.decorators import annotate
 from api_star.utils import JSONEncoder
 from coreapi.codecs import CoreJSONCodec
 import jinja2
 import json
 
 
-def render(request, data):
-    """
-    Given the incoming request, and the outgoing data,
-    determine the content type and content of the response.
-    """
-    renderer = request.renderer or request.renderers[0]
-
-    if data is None:
-        content = b''
-    elif not isinstance(data, string_types):
-        context = {'request': request}
-        content = renderer(data, **context)
+def json_renderer(verbose=False, ensure_ascii=False, encoder_cls=None):
+    if verbose:
+        separators = VERBOSE_SEPARATORS
+        indent = 4
     else:
-        content = data
+        separators = COMPACT_SEPARATORS
+        indent = None
 
-    if isinstance(content, text_type) and renderer.charset:
-        content = content.encode(renderer.charset)
+    if encoder_cls is None:
+        encoder_cls = JSONEncoder
 
-    if renderer.media_type:
-        content_type = '%s' % renderer.media_type
-        if renderer.charset:
-            content_type += '; charset=%s' % renderer.charset
-    else:
-        content_type = None
+    @annotate(media_type='application/json', charset=None, format='json')
+    def renderer(data):
+        content = json.dumps(
+            data,
+            separators=separators,
+            indent=indent,
+            cls=encoder_cls,
+            ensure_ascii=ensure_ascii
+        )
+        if isinstance(content, text_type):
+            content = content.encode('utf-8')
+        return content
 
-    return (content, content_type)
-
-
-class JSONRenderer(object):
-    media_type = 'application/json'
-    charset = None
-    format = 'json'
-
-    def __call__(self, data, **context):
-        return json.dumps(data, cls=JSONEncoder, ensure_ascii=False)
+    return renderer
 
 
-class CoreJSONRenderer(object):
-    media_type = 'application/vnd.coreapi+json'
-    charset = None
-    format = 'coreapi'
+def corejson_renderer(verbose=False):
+    codec = CoreJSONCodec()
 
-    def __call__(self, data, **context):
-        return CoreJSONCodec().dump(data)
+    @annotate(media_type='application/vnd.coreapi+json', charset=None, format='coreapi')
+    def renderer(data, **context):
+        return codec.dump(data, indent=verbose)
+
+    return renderer
 
 
-class DocsRenderer(object):
-    media_type = 'text/html'
-    charset = 'utf-8'
-    format = 'html'
-
-    def __init__(self):
+def docs_renderer(template=None):
+    if template is None:
         loader = jinja2.PackageLoader('api_star', 'templates')
         env = jinja2.Environment(loader=loader)
-        self.template = env.get_template('docs.html')
+        template = env.get_template('docs.html')
 
-    def __call__(self, data, **context):
-        return self.template.render(document=data)
+    @annotate(media_type='text/html', charset='utf-8', format='html')
+    def renderer(data, **context):
+        return template.render(document=data)
+
+    return renderer
 
 
-class HTMLRenderer(object):
-    media_type = 'text/html'
-    format = 'html'
-
-    def __call__(self, data, **context):
+def html_renderer():
+    @annotate(media_type='text/html', charset='utf-8', format='html')
+    def renderer(data, **context):
         return data
+
+    return renderer

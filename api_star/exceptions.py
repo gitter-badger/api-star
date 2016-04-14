@@ -9,7 +9,7 @@ class APIException(Exception):
             self.code = code
 
     def __str__(self):
-        return repr(self.description)
+        return '%s' % self.description
 
 
 class BadRequest(APIException):

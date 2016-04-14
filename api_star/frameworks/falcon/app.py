@@ -1,9 +1,8 @@
+from api_star.core import check_permissions, render
 from api_star.exceptions import APIException, NotAcceptable
 from api_star.frameworks.falcon.request import APIRequest
 from api_star.frameworks.falcon.response import APIResponse
 from api_star.schema import get_link
-from api_star.permissions import check_permissions
-from api_star.renderers import render
 from collections import namedtuple
 import coreapi
 import falcon
@@ -18,7 +17,7 @@ def error_handler(exc, request, response, params):
     data = {'message': exc.description}
     content, content_type = render(request, data)
     if content_type:
-        response.set_header('ContentType', content_type)
+        response.set_header('Content-Type', content_type)
     response.body = content
     response.status = str(exc.code)  # TODO: Blergh
 

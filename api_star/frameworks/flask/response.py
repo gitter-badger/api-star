@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from coreapi import Document
 from flask import request, Response
-from api_star.renderers import render
+from api_star.core import render
 
 
 class APIResponse(Response):

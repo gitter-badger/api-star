@@ -1,5 +1,6 @@
-import sys
+import binascii
 import inspect
+import sys
 
 
 PY3 = sys.version_info[0] == 3
@@ -8,8 +9,8 @@ PY3 = sys.version_info[0] == 3
 if PY3:
     string_types = (str,)
     text_type = str
-    COMPACT_SEPARATORS = (',', ':')
-    VERBOSE_SEPARATORS = (',', ': ')
+    COMPACT_SEPARATORS = (',', ':')   # Compact JSON
+    VERBOSE_SEPARATORS = (',', ': ')  # Indented JSON
 
     def copy_signature(copy_from, copy_to):
         copy_to.__signature__ = inspect.signature(copy_from)
@@ -17,11 +18,13 @@ if PY3:
     def getargspec(func):
         return inspect.getargspec(func)
 
+    Base64DecodeError = binascii.Error
+
 else:
     string_types = (type(b''), type(u''))
     text_type = unicode
-    COMPACT_SEPARATORS = (b',', b':')
-    VERBOSE_SEPARATORS = (b',', b': ')
+    COMPACT_SEPARATORS = (b',', b':')   # Compact JSON
+    VERBOSE_SEPARATORS = (b',', b': ')  # Indented JSON
 
     def copy_signature(copy_from, copy_to):
         # inspect.signature does not exists.
@@ -31,3 +34,5 @@ else:
 
     def getargspec(func):
         return getattr(func, '_argspec', inspect.getargspec(func))
+
+    Base64DecodeError = TypeError

@@ -12,26 +12,18 @@ ZERO = datetime.timedelta(0)
 
 class JSONEncoder(json.JSONEncoder):
     """
-    JSONEncoder subclass that deals with Python built-in types.
+    JSONEncoder subclass that deals with various built-in types.
     """
     def default(self, obj):
         if isinstance(obj, datetime.datetime):
             representation = obj.isoformat()
-            if obj.microsecond:
-                # ISO 8601 represents time to .001 precision.
-                representation = representation[:23] + representation[26:]
             if representation.endswith('+00:00'):
-                # Prefer 'UTC' designator when applicable.
                 representation = representation[:-6] + 'Z'
             return representation
         elif isinstance(obj, datetime.date):
             return obj.isoformat()
         elif isinstance(obj, datetime.time):
-            representation = obj.isoformat()
-            if obj.microsecond:
-                # ISO 8601 represents time to .001 precision.
-                representation = representation[:12]
-            return representation
+            return obj.isoformat()
         elif isinstance(obj, decimal.Decimal):
             return float(obj)
         elif isinstance(obj, uuid.UUID):
@@ -182,3 +174,21 @@ def parse_iso8601_datetime(value, default_timezone=None):
         kw['tzinfo'] = tzinfo
         return datetime.datetime(**kw)
     raise ValueError('Not a valid datetime format')
+
+
+def parse_header_params(media_type):
+    """
+    Parse any media type parameters returning them as a dictionary.
+    (Eg in Accept or Content-Type headers,)
+    """
+    main_type, sep, param_string = media_type.partition(';')
+    params = {}
+    for token in param_string.strip().split(','):
+        key, sep, value = token.partition('=')
+        key = key.strip()
+        value = value.strip()
+        if value.startswith('"') and value.endswith('"'):
+            value = value[1:-1]
+        if key:
+            params[key] = value
+    return params
