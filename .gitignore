@@ -6,4 +6,5 @@ site/
 *.egg-info/
 *.pyc
 __pycache__
+.cache
 .coverage

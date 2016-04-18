@@ -20,7 +20,7 @@ def json_renderer(verbose=False, ensure_ascii=False, encoder_cls=None):
         encoder_cls = JSONEncoder
 
     @annotate(media_type='application/json', charset=None, format='json')
-    def renderer(data):
+    def renderer(data, **context):
         content = json.dumps(
             data,
             separators=separators,

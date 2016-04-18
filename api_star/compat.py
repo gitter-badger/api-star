@@ -12,6 +12,8 @@ if PY3:
     COMPACT_SEPARATORS = (',', ':')   # Compact JSON
     VERBOSE_SEPARATORS = (',', ': ')  # Indented JSON
 
+    from urllib.parse import urlparse  # noqa
+
     def copy_signature(copy_from, copy_to):
         copy_to.__signature__ = inspect.signature(copy_from)
 
@@ -25,6 +27,8 @@ else:
     text_type = unicode
     COMPACT_SEPARATORS = (b',', b':')   # Compact JSON
     VERBOSE_SEPARATORS = (b',', b': ')  # Indented JSON
+
+    from urlparse import urlparse  # noqa
 
     def copy_signature(copy_from, copy_to):
         # inspect.signature does not exists.
