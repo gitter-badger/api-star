@@ -85,3 +85,19 @@ deployed API using the `coreapi` command-line client.
         day_of_week(date)
     $ coreapi action day_of_week --param date 1979-03-04
     {"day": "Sunday"}
+
+## Testing.
+
+Test view functions directly:
+
+    assert day_of_week(date='2000-01-01') == {'day': 'Saturday'}
+
+Use a `TestSession` object to simulate calling your API with the `requests` library:
+
+    from api_star.test import TestSession
+    from my_project import app
+
+    session = TestSession(app)
+    response = session.get('/day-of-week/', params={'date': '2000-01-01'})
+    assert response.status_code == 200
+    assert response.json() == {'day': 'Saturday'}
