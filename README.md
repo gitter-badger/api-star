@@ -6,11 +6,11 @@
 * Automatic schema & documentation generation.
 * Dynamic client libraries for interacting with your APIs.
 
-## Requirements.
+## Requirements
 
 Python 2.7 or 3.4+.
 
-## Getting started.
+## Getting started
 
 For this example we'll use Flask.
 
@@ -42,7 +42,7 @@ Now we can interact with the API
     $ curl http://127.0.0.1:5000/day-of-week/?date=1979-03-04
     {"day": "Sunday"}
 
-## Alternative backends.
+## Alternative backends
 
 We can also switch over to using the Falcon backend.
 First we'll edit the `App` import line.
@@ -54,14 +54,14 @@ Now install Falcon and the gunicorn WSGI server, and start the API again:
     $ pip install falcon gunicorn
     $ gunicorn -b localhost:5000 example:app
 
-## Documentation & schema generation.
+## Documentation & schema generation
 
 API Star provides support for automatic documentation and schema generation.
 Let's add an endpoint that will render API documentation to support this.
 
-    from api_star import renderers
+    from api_star.renderers import corejson_renderer, docs_renderer
 
-    @app.get('/', renderers=[CoreJSONRenderer(), DocsRenderer()], exclude_from_schema=True)
+    @app.get('/', renderers=[corejson_renderer(), docs_renderer()], exclude_from_schema=True)
     def root():
         return app.schema
 
@@ -74,7 +74,7 @@ Or if we request the endpoint with a command-line client, we get a schema.
     $ curl http://127.0.0.1:5000/
     {"_type":"document","_meta":{"title":"Day of Week API"},"day_of_week":{"_type":"link","url":"/day-of-week/","action":"GET","description":"Returns the day of the week, for the given date.","fields":[{"name":"date","required":true,"location":"query"}]}}
 
-## Client libraries.
+## Client libraries
 
 Once you've included a schema, clients can inspect and interact with your
 deployed API using the `coreapi` command-line client.
@@ -86,13 +86,13 @@ deployed API using the `coreapi` command-line client.
     $ coreapi action day_of_week --param date 1979-03-04
     {"day": "Sunday"}
 
-## Testing.
+## Testing
 
-Test view functions directly:
+Call API functions directly:
 
     assert day_of_week(date='2000-01-01') == {'day': 'Saturday'}
 
-Use a `TestSession` object to simulate calling your API with the `requests` library:
+Use `TestSession` to call into your API using the `requests` library:
 
     from api_star.test import TestSession
     from my_project import app
@@ -101,3 +101,17 @@ Use a `TestSession` object to simulate calling your API with the `requests` libr
     response = session.get('/day-of-week/', params={'date': '2000-01-01'})
     assert response.status_code == 200
     assert response.json() == {'day': 'Saturday'}
+
+## Configuration
+
+Use `Environment` to configure your application based on environment variables:
+
+    from api_star import validators
+    from api_star.environment import Environment
+
+    env = Environment(
+        DEBUG=(validators.boolean(), "True"),
+        SECRET_KEY=(validators.string(), "290f6f17c13945aa")
+    )
+
+    env.DEBUG  # `True`
