@@ -1,6 +1,7 @@
 # API Star
 
-[![Build Status](https://travis-ci.org/tomchristie/api-star.svg?branch=master)](https://travis-ci.org/tomchristie/api-star)
+[![travis-badge]][travis]
+[![pypi-badge]][pypi]
 
 *An API framework for Flask & Falcon.*
 
@@ -117,3 +118,8 @@ Use `Environment` to configure your application based on environment variables:
     )
 
     env.DEBUG  # Defaults to `True`, unless environment variable is set.
+
+[travis-badge]: https://travis-ci.org/tomchristie/api-star.svg?branch=master
+[travis]: https://travis-ci.org/tomchristie/api-star
+[pypi-badge]: https://img.shields.io/pypi/v/api-star.svg
+[pypi]: https://pypi.python.org/pypi/api-star
