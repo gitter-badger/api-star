@@ -1,5 +1,7 @@
 # API Star
 
+[![Build Status](https://travis-ci.org/tomchristie/api-star.svg?branch=master)](https://travis-ci.org/tomchristie/api-star)
+
 *An API framework for Flask & Falcon.*
 
 * Flask and Falcon backends.
