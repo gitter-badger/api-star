@@ -114,4 +114,4 @@ Use `Environment` to configure your application based on environment variables:
         SECRET_KEY=(validators.string(), "290f6f17c13945aa")
     )
 
-    env.DEBUG  # `True`
+    env.DEBUG  # Defaults to `True`, unless environment variable is set.
