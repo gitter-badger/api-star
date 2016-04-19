@@ -1,5 +1,7 @@
 # API Star
 
+[![Join the chat at https://gitter.im/tomchristie/api-star](https://badges.gitter.im/tomchristie/api-star.svg)](https://gitter.im/tomchristie/api-star?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![travis-badge]][travis]
 [![pypi-badge]][pypi]
 
