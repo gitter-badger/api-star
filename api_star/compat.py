@@ -24,7 +24,7 @@ if PY3:
 
 else:
     string_types = (type(b''), type(u''))
-    text_type = unicode
+    text_type = unicode  # noqa
     COMPACT_SEPARATORS = (b',', b':')   # Compact JSON
     VERBOSE_SEPARATORS = (b',', b': ')  # Indented JSON
 

@@ -28,11 +28,11 @@ def test_basic_auth():
     with pytest.raises(Unauthorized):
         auth(MockRequest(b'Basic notbase64'))
     with pytest.raises(Unauthorized):
-        auth(MockRequest(b'Basic ' + base64.b64encode('username_only')))
+        auth(MockRequest(b'Basic ' + base64.b64encode(b'username_only')))
     with pytest.raises(Unauthorized):
-        auth(MockRequest(b'Basic ' + base64.b64encode('invalid:credentials')))
+        auth(MockRequest(b'Basic ' + base64.b64encode(b'invalid:credentials')))
 
-    assert auth(MockRequest('Basic ' + base64.b64encode('admin:password'))) == 'admin'
+    assert auth(MockRequest(b'Basic ' + base64.b64encode(b'admin:password'))) == 'admin'
 
 
 def test_token_auth():

@@ -1,6 +1,14 @@
 coreapi==1.18.5
-coverage==3.7.1
+requests==2.9.1
+
+# Frameworks
 flask==0.10.1
+falcon==0.3.0
+
+# Test
+coverage==3.7.1
 flake8==2.1.0
-mkdocs==0.5
 pytest==2.9.1
+
+# Documentation
+mkdocs==0.5

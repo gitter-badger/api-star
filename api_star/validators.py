@@ -115,9 +115,9 @@ def text(max_length=None, min_length=None, trim_whitespace=True, allow_blank=Fal
             value = value.strip()
         if is_blank(value, allow_blank):
             return ''
-        if len(value) > max_length:
+        if (max_length is not None) and (len(value) > max_length):
             raise ValidationError(errors['max_length'].format(max_length=max_length))
-        if len(value) < min_length:
+        if (min_length is not None) and (len(value) < min_length):
             raise ValidationError(errors['min_length'].format(min_length=min_length))
         return value
 

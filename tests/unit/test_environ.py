@@ -1,6 +1,5 @@
 from api_star.environment import Environment
 from api_star import validators
-import os
 
 
 def test_default():
@@ -11,8 +10,10 @@ def test_default():
 
 
 def test_set_variable():
-    os.environ['EXAMPLE'] = '456'
-    env = Environment(
+    class MockEnvironment(Environment):
+        environ = {'EXAMPLE': '456'}
+
+    env = MockEnvironment(
         EXAMPLE=(validators.integer(), '123')
     )
     assert env.EXAMPLE == 456
